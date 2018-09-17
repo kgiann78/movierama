@@ -37,6 +37,8 @@ public class MovieramaController {
     @Autowired
     private Integer moviesByUserId;
 
+    private static final String REDIRECT = "redirect:/";
+
     @GetMapping(value = "/")
     public String index(Model model) {
 
@@ -63,14 +65,14 @@ public class MovieramaController {
         moviesByUserId = 0;
         sortedBy = SortedBy.DATE;
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping(value = "/orderBy/{sorted}")
     public String orderBy(@ModelAttribute("sorted") String sorted, Model model) {
         this.sortedBy = SortedBy.valueOf(sorted);
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/login")
@@ -86,13 +88,13 @@ public class MovieramaController {
 
         if (this.user == null) this.user = new User();
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/logout")
     public String logout(Model model) {
         this.user = new User();
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/signup")
@@ -104,7 +106,7 @@ public class MovieramaController {
     @PostMapping("/signup")
     public String submit(@ModelAttribute User user) {
         this.user = restClientService.create(user);
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/create-movie")
@@ -120,7 +122,7 @@ public class MovieramaController {
 
         restClientService.create(user.getId(), movie);
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/like/{id}")
@@ -133,7 +135,7 @@ public class MovieramaController {
             user = restClientService.likeMovieForUser(user.getId(), movie.getId());
         }
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/hate/{id}")
@@ -146,7 +148,7 @@ public class MovieramaController {
             user = restClientService.hateMovieForUser(user.getId(), movie.getId());
         }
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     @GetMapping("/user/{id}")
@@ -171,7 +173,7 @@ public class MovieramaController {
             return "index";
         }
 
-        return "redirect:/";
+        return REDIRECT;
     }
 
     private void sortMovies(List<Movie> movies) {

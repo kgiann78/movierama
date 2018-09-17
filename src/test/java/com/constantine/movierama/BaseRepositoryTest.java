@@ -16,6 +16,6 @@ public class BaseRepositoryTest {
 
     @Test
     void init() {
-
+        // just an empty test just not to let intellij nagging
     }
 }

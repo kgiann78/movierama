@@ -3,13 +3,14 @@ package com.constantine.movierama.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Movie {
+public class Movie implements Serializable {
 
     private int id;
     private String title;

@@ -26,7 +26,6 @@ public class MoviesRepositoryTest extends BaseRepositoryTest {
 
     @Test
     public void moviesCRUDTest() {
-        try {
 
             User user = new User();
             user.setName("test_user");
@@ -73,8 +72,5 @@ public class MoviesRepositoryTest extends BaseRepositoryTest {
 
             assertNotNull(user);
             logger.info("Asserting that we didn't delete user");
-
-        } finally {
-        }
     }
 }
