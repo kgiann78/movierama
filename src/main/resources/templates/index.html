@@ -1,0 +1,129 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <style type="text/css">
+    ul {
+        list-style: none;
+    }
+    </style>
+</head>
+<body>
+<div id="navbar">
+    <div style="float:left">
+        <a th:href="@{'/resetview'}">MovieRama</a>
+    </div>
+
+    <div style="float:right">
+        <div id="unregistered-user" th:if="${user == null || user.id == 0}">
+            <span><a href="/login">log in</a> or <a href="/signup">Sign Up</a></span>
+        </div>
+        <div id="registered-user" th:if="${user != null && user.id > 0}">
+            <span>Welcome <a href="#" th:text="${user.name} + ' ' + ${user.surname}"></a></span>
+            <span><a href="/logout">Log out</a></span>
+        </div>
+    </div>
+
+    <div style="clear:both"></div>
+    <div>
+        <p>Sort by: <a th:href="@{'/orderBy/LIKES'}">Likes</a> | <a th:href="@{'/orderBy/HATES'}">Hates</a> | <a
+                th:href="@{'/orderBy/DATE'}">Date</a></p>
+    </div>
+</div>
+<br>
+
+
+<div style="float:left">
+    <ul th:each="movie : ${movies}">
+        <li>
+            <div style="border:1px solid black">
+                <h1 th:text="${movie.title}"> Title </h1>
+
+                <p>Posted by <a th:href="@{'/user/' + ${movie.user.id}}"
+                                th:text="${user != null && user.id == movie.user.id} ? 'You':${movie.user.name} + ' ' + ${movie.user.surname}">
+                </a>
+
+                    <th:block
+                            th:with="duration=${T(com.constantine.movierama.web.MovieramaController).findDays(movie.dateOfPublication)}"
+                            th:switch="${duration[1]}">
+                        <span th:case="'DAYS'" th:text="${duration[0]} + ' days ago'"></span>
+                        <span th:case="'HOURS'" th:text="${duration[0]} + ' hours ago'"></span>
+                        <span th:case="'MINUTES'" th:text="${duration[0]} + ' minutes ago'"></span>
+                        <span th:case="*" th:text="${duration[0]}"></span>
+                    </th:block>
+                </p>
+
+
+                <p th:text="${movie.description}"> Description </p>
+
+                <div>
+
+                    <div th:if="${user == null}">
+                        <span th:text="${movie.likes} + ' likes | ' + ${movie.hates} + ' hates'">likes</span>
+                    </div>
+
+                    <div th:if="${ratings}"
+                         th:with="ratingValue=${T(com.constantine.movierama.web.MovieramaController).getValueFromMap(ratings, movie.id)}">
+
+                        <th:block th:if="${ratingValue}" th:switch="${ratingValue}">
+                            <div th:case="'OWNER'">
+                                <span th:text="${movie.likes} + ' likes | ' + ${movie.hates} + ' hates'">likes</span>
+                            </div>
+                            <div th:case="'LIKE'">
+                                <span th:text="${movie.likes} + ' likes'">likes</span> | <a
+                                    th:href="@{'/hate/' + ${movie.id}}"
+                                    th:text="${movie.hates} + ' hates'">hates</a>
+
+                                <span>You like this movie | <a th:href="@{'/like/' + ${movie.id}}">Unlike it</a></span>
+                            </div>
+                            <div th:case="'HATE'">
+                                <a th:href="@{'/like/' + ${movie.id}}"
+                                   th:text="${movie.likes} + ' likes'">likes</a> | <span
+                                    th:text="${movie.hates} + ' hates'">hates</span>
+
+                                <span>You hate this movie | <a th:href="@{'/hate/' + ${movie.id}}">Unhate it</a></span>
+                            </div>
+                            <div th:case="'NOTHING'">
+                                <a th:href="@{'/like/' + ${movie.id}}"
+                                   th:text="${movie.likes} + ' likes'">likes</a> | <a
+                                    th:href="@{'/hate/' + ${movie.id}}"
+                                    th:text="${movie.hates} + ' hates'">hates</a>
+
+                            </div>
+                        </th:block>
+                        <th:block th:if="${ratingValue == null}" th:switch="${movie.user.id}">
+
+                            <div th:case="${user.id}">
+                                <span th:text="${movie.likes} + ' likes | ' + ${movie.hates} + ' hates'">likes</span>
+                            </div>
+
+                            <div th:case="*">
+                                <a th:href="@{'/like/' + ${movie.id}}"
+                                   th:text="${movie.likes} + ' likes'">likes</a> | <a
+                                    th:href="@{'/hate/' + ${movie.id}}"
+                                    th:text="${movie.hates} + ' hates'">hates</a>
+
+                            </div>
+                        </th:block>
+                    </div>
+
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
+<div style="float:right" th:if="${user != null}">
+
+    <!--<form action="#" th:action="@{/create-movie}" th:object="${user}" method="post">-->
+    <!--<input type="hidden" th:field="*{id}" th:value="${user.id}">-->
+    <!--<input type="hidden" th:field="*{name}" th:value="${user.name}">-->
+    <!--<input type="hidden" th:field="*{surname}" th:value="${user.surname}">-->
+    <!--<button type="submit" value="Submit">New Movie</button>-->
+    <!--</form>-->
+    <button onclick="location.href='/create-movie';" id="newMovie" class="float-left submit-button">New Movie</button>
+
+</div>
+</body>
+</html>
