@@ -36,7 +36,7 @@ public class RestClientService {
     }
 
     public List<Movie> findMoviesByUser(int id, SortedBy sortedBy) {
-        return  Arrays.stream(restTemplate.getForObject(host + USERS_API + id + MOVIES + sortedBy.name(), Movie[].class)).collect(Collectors.toList());
+        return  Arrays.stream(restTemplate.getForObject(host + USERS_API + id + MOVIES + "?sortedBy=" + sortedBy, Movie[].class)).collect(Collectors.toList());
     }
 
     public User findUserById(int id) {

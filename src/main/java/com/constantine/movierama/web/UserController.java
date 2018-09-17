@@ -37,10 +37,8 @@ public class UserController {
         return userRepository.findById(userId).orElse(null);
     }
 
-    @RequestMapping(value = "/{id}/movies/{sorted}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    Iterable<Movie> findMoviesByUser(@PathVariable("id") int userId, @PathVariable("sorted") String sorted) {
-
-        SortedBy sortedBy = SortedBy.valueOf(sorted);
+    @RequestMapping(value = "/{id}/movies", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    Iterable<Movie> findMoviesByUser(@PathVariable("id") int userId, @RequestParam("sortedBy") SortedBy sortedBy) {
 
         switch (sortedBy) {
             case LIKES:
